@@ -93,12 +93,6 @@
             // LOG('Fetching LocalHost:8080/data')
             const currentDataResponse = await fetch(`http://localhost:8080/data/${city}`)
 
-            let minTemp = undefined;
-            let maxTemp = undefined;
-            let totalRainfall = 0;
-            let averageWindspeed = 0;
-
-
             // LOG('Checking Response')
             if (!currentDataResponse.ok) {
                 LOG('Response was not OK')
@@ -110,6 +104,23 @@
 
             // LOG('Splitting Data into Objects [Object Destructuring]')
             let [temp_data, perc_data, wind_data, cloud_data] = weatherData.slice(-4)
+
+            getDataForPast24Hours(weatherData)
+
+            // LOG(`T: ${temperature.type}\nN: ${percipitation.type}\nW: ${wind_speed.type}\nC: ${cloud_coverage.type}`)
+
+            LOG('Attempt to display data')
+            console.log(weatherData)
+            displayCurrent(theView, temp_data, perc_data, wind_data, cloud_data)
+            //displayPastDay(theView, minTemp, maxTemp, totalRainfall, averageWindspeed)
+        }
+
+        function getDataForPast24Hours(weatherData) {
+
+            let minTemp = undefined;
+            let maxTemp = undefined;
+            let totalRainfall = 0;
+            let averageWindspeed = 0;
 
             // Forloop for getting the last 24 hours in numbers 
             for (let i = -4; i >= -96; i -= 4) {
@@ -129,17 +140,10 @@
                 totalRainfall = totalRainfall + perc_data.value
                 averageWindspeed += wind_data.value
             }
-
-            averageWindspeed = wind_data.value / 20;
+            
+            averageWindspeed /= 24;
 
             console.log(minTemp, maxTemp, totalRainfall, averageWindspeed)
-
-            // LOG(`T: ${temperature.type}\nN: ${percipitation.type}\nW: ${wind_speed.type}\nC: ${cloud_coverage.type}`)
-
-            LOG('Attempt to display data')
-            console.log(weatherData)
-            displayCurrent(theView, temp_data, perc_data, wind_data, cloud_data)
-            //displayPastDay(theView, minTemp, maxTemp, totalRainfall, averageWindspeed)
         }
 
         async function getForecast(city, theView) {
