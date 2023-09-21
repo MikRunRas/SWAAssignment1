@@ -2,6 +2,7 @@ export default (window) => {
   const document = window.document;
   const currentWeather = document.getElementById("weather_data");
   const forecast = document.getElementById("forecast_data");
+  const past = document.getElementById("past_24_hours");
   const listeners = [];
 
   const listen = (l) => listeners.push(l);
@@ -104,47 +105,47 @@ export default (window) => {
     let cloud = model.cloud_coverage;
     updateForecastBox(row, cloud)
 
-    // updateForecastValueUnit(row, cloud);
-
     // End Table Row
     forecast.appendChild(row);
   };
-
-  // function updateForecastTemperature(row, t_data) {
-  //   let td = document.createElement("td");
-  //   td.textContent = `${t_data.from} - ${t_data.to} ${t_data.unit}`
-
-  //   row.appendChild(td);
-  // }
-
-  // function updateForecastPercipitation(row, p_data) {
-  //   let td = document.createElement("td");
-  //   td.textContent = `${p_data.from} - ${p_data.to} ${p_data.unit}`
-
-  //   row.appendChild(td);
-  // }
-
-  // function updateForecastWindSpeed(row, w_data) {
-  //   let td = document.createElement("td");
-  //   td.textContent = `${w_data.from} - ${w_data.to} ${w_data.unit} , ${w_data.directions}`
-
-  //   row.appendChild(td);
-  // }
-
-  // function updateForecastCloudCoverage(row, c_data) {
-  //   let td = document.createElement("td");
-  //   //td.textContent = `${c_data.from} - ${c_data.to} ${c_data.unit}`
-
-  //   //row.appendChild(td);
-  // }
 
   function updateForecastBox(row, data) {
     let td = document.createElement("td");
     td.textContent = `From ${data.from} to ${data.to} ${data.unit}`;
     row.appendChild(td);
-  }
+    }
 
-  return { listen, prompt, displayError, updateCurrent, updateForecast };
+    // ------------------------
+    // |  Past 24 Hours Data  |
+    // ------------------------
+
+    const updatePast24Hours = (model) => {
+        // Start Table Row
+        let row = document.createElement("tr");
+
+        let minTemp = model.minTemp
+        let maxTemp = model.maxTemp
+        let averageWindspeed = model.averageWindspeed
+        let totalRainfall = model.totalRainfall
+
+        updatePast24HoursValueUnit(row, minTemp)
+        updatePast24HoursValueUnit(row, maxTemp)
+        updatePast24HoursValueUnit(row, averageWindspeed)
+        updatePast24HoursValueUnit(row, totalRainfall)
+
+        // End Table Row
+        past.appendChild(row);
+    }
+
+    function updatePast24HoursValueUnit(row, data) {
+        // Create TD element
+        let td = document.createElement("td");
+        // Add Data Value and Unit to the Context
+        td.textContent = `${data.value}${data.unit}`;
+        // Add TD to the TR
+        row.appendChild(td);
+    }
+
+    return { listen, prompt, displayError, updateCurrent, updateForecast, updatePast24Hours };
 };
-
 
