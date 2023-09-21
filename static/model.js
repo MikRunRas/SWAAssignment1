@@ -8,14 +8,6 @@ export default model => {
         temperature,
         percipitation,
         wind_speed,
-        cloud_coverage,
-        dump
+        cloud_coverage
     }
-}
-
-
-
-function dump() {
-    // Using [this.] to ensure the data is the correct data in the object
-    console.log(` ! MODEL DATA DUMP !\n\t${this.temperature}, ${this.percipitation}, ${this.wind_speed}, ${this.cloud_coverage}`)
 }

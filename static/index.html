@@ -15,11 +15,10 @@
         }
     </style>
     <script type='module'>
+
         // Import { things } from 'module'
         import view from './view.js'
         import model from './model.js'
-
-        const LOG = (msg) => console.log(msg)
 
         function displayCurrent(theView, temperature, percipitation, wind, cloud) {
             // Create Current Weather Model
@@ -54,6 +53,7 @@
         }
 
         function displayPastDay(theView, minTemp, maxTemp, totalRainfall, averageWindspeed) {
+
             // Create Current Weather Model
             const past24HoursModel = { minTemp, maxTemp, totalRainfall, averageWindspeed }
 
@@ -71,50 +71,37 @@
 
         //Hardcoded value for Aarhus is not a great solution, but it is our solution.
         window.init = async function (selectedValue = 'Aarhus') {
-            // Debugging Purposes
-            // LOG('Initialising')
 
             document.getElementById("city").innerHTML = selectedValue
 
             const theView = view(window)
 
             try {
-                // [SelectedValue = City] >:)
                 getCurrentWeather(selectedValue, theView)
                 getForecast(selectedValue, theView)
             }
             catch (e) {
-                LOG(`\tinit.catch: ${e}`)
                 theView.displayError(e)
             }
         }
 
         async function getCurrentWeather(city, theView) {
-            // LOG('Fetching LocalHost:8080/data')
             const currentDataResponse = await fetch(`http://localhost:8080/data/${city}`)
 
-            // LOG('Checking Response')
             if (!currentDataResponse.ok) {
-                LOG('Response was not OK')
                 throw currentDataResponse.statusText
             }
 
-            // LOG('Retreiving WeatherData')
             const weatherData = await currentDataResponse.json()
 
-            // LOG('Splitting Data into Objects [Object Destructuring]')
             let [temp_data, perc_data, wind_data, cloud_data] = weatherData.slice(-4)
 
-            getDataForPast24Hours(theView, weatherData)
+            getDataForPast24Hours(weatherData, theView)
 
-            // LOG(`T: ${temperature.type}\nN: ${percipitation.type}\nW: ${wind_speed.type}\nC: ${cloud_coverage.type}`)
-
-            LOG('Attempt to display data')
-            console.log(weatherData)
             displayCurrent(theView, temp_data, perc_data, wind_data, cloud_data)
         }
 
-        function getDataForPast24Hours(theView, weatherData) {
+        function getDataForPast24Hours(weatherData, theView) {
 
             let minTemp = undefined;
             let maxTemp = undefined;
@@ -142,15 +129,12 @@
             
             averageWindspeed.v /= 24;
 
-            console.log(minTemp, maxTemp, totalRainfall, averageWindspeed)
-
             displayPastDay(theView, minTemp, maxTemp, totalRainfall, averageWindspeed)
         }
 
         async function getForecast(city, theView) {
             const forecastResponse = await fetch(`http://localhost:8080/forecast/${city}`)
             if (!forecastResponse.ok) {
-                LOG('Response was not OK')
                 throw forecastResponse.statusText
             }
 
@@ -168,8 +152,6 @@
 
         }
 
-
-        //Very bad PostData function
         function PostData() {
             // Get values from input fields
             var temperatureValue = document.getElementById('temperature').value;
@@ -223,9 +205,7 @@
                 body: postDataJSON
             })
                 .then(response => {
-                    if (response.ok) {
-                        console.log('Data posted successfully.');
-                    } else {
+                    if (!response.ok) {
                         console.error('Failed to post data.');
                     }
                 })

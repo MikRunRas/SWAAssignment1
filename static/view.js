@@ -19,8 +19,6 @@ export default (window) => {
   // ------------------
 
   const updateCurrent = (model) => {
-    // console.log("> Updating Current");
-    // model.dump()
 
     // Start Table Row
     let row = document.createElement("tr");
@@ -35,42 +33,9 @@ export default (window) => {
     let perc = model.percipitation;
     updateCurrentValueUnit(row, perc);
 
-    // let cloud = model.cloud_coverage;
-    // updateCurrentCloudCoverage(cloud)
-
-    // updateCurrentValueUnit(row, cloud);
-
     // End Table Row
     currentWeather.appendChild(row);
   };
-
-  // function updateCurrentTemperature(row, t_data) {
-  //   let td = document.createElement("td");
-  //   td.textContent = `${t_data.value}${t_data.unit}`;
-
-  //   row.appendChild(td);
-  // }
-
-  // function updateCurrentPercipitation(row, p_data) {
-  //   let td = document.createElement("td");
-  //   td.textContent = `${p_data.value}${p_data.unit}`;
-
-  //   row.appendChild(td);
-  // }
-
-  // function updateCurrentWindSpeed(row, w_data) {
-  //   let td = document.createElement("td");
-  //   td.textContent = `${w_data.value}${w_data.unit}`;
-
-  //   row.appendChild(td);
-  // }
-
-  // function updateCurrentCloudCoverage(row, c_data) {
-  //   let td = document.createElement("td");
-  //   td.textContent = `${c_data.value}${c_data.unit}`;
-
-  //   row.appendChild(td);
-  // }
 
   function updateCurrentValueUnit(row, data) {
     // Create TD element
@@ -86,8 +51,7 @@ export default (window) => {
   // |  Forecast Data  |
   // -------------------
 
-  const updateForecast = (model) => {
-    // console.log("> Updating Forecast");
+    const updateForecast = (model) => {
 
     // Start Table Row
     let row = document.createElement("tr");
